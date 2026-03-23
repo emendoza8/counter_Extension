@@ -111,28 +111,88 @@ window.addEventListener("keydown", (e) => {
   if (buffer.length > trigger.length) {
     buffer = buffer.slice(-trigger.length);
   }
+// --- State ---
+let buffer = "";
+let count = 0;
+let lastKeyTime = 0;
 
-  // Increment
-  if (buffer === trigger) {
-    count++;
-    updateDisplay();
+const trigger = "vvv";
+const resetTrigger = "rrr";
+const maxDelay = 500; // ms between key presses
 
-    animate();
-    buffer = "";
-  }
+// --- Create overlay ---
+const overlay = document.createElement("div");
+overlay.id = "vvv-overlay";
+overlay.innerText = "Count: loading...";
+document.body.appendChild(overlay);
 
-  // Reset
-  if (buffer === resetTrigger) {
-    count = 0;
-    updateDisplay();
+// --- Update display ---
+function updateDisplay() {
+  overlay.innerText = `Count: ${count}`;
+}
 
-    animate();
-    buffer = "";
-  }
-});
+// --- Save count globally ---
+function saveCount() {
+  chrome.storage.local.set({ vvvCount: count });
+}
 
-// Simple animation
+// --- Animation ---
 function animate() {
   overlay.classList.add("pop");
   setTimeout(() => overlay.classList.remove("pop"), 150);
 }
+
+// --- Load initial count ---
+chrome.storage.local.get(["vvvCount"], (result) => {
+  count = result.vvvCount || 0;
+  updateDisplay();
+});
+
+// --- Listen for changes from other tabs ---
+chrome.storage.onChanged.addListener((changes, area) => {
+  if (area === "local" && changes.vvvCount) {
+    count = changes.vvvCount.newValue;
+    updateDisplay();
+  }
+});
+
+// --- Key listener ---
+window.addEventListener("keydown", (e) => {
+  const now = Date.now();
+  const key = e.key.toLowerCase();
+
+  // Only track letters
+  if (!/^[a-z]$/.test(key)) return;
+
+  // Reset buffer if too slow
+  if (now - lastKeyTime > maxDelay) {
+    buffer = "";
+  }
+
+  lastKeyTime = now;
+
+  buffer += key;
+
+  // Keep buffer length under control
+  if (buffer.length > trigger.length) {
+    buffer = buffer.slice(-trigger.length);
+  }
+
+  // --- Increment ---
+  if (buffer === trigger) {
+    count++;
+    updateDisplay();
+    saveCount();
+    animate();
+    buffer = "";
+  }
+
+  // --- Reset ---
+  if (buffer === resetTrigger) {
+    count = 0;
+    updateDisplay();
+    saveCount();
+    animate();
+    buffer = "";
+  }
+});
