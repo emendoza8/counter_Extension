@@ -10,7 +10,9 @@
   border-radius: 10px;
   z-index: 2147483647;
   transition: transform 0.15s ease;
-  pointer-events: none; /* click-through */
+  cursor: grab;
+
+  pointer-events: auto; /* REQUIRED for dragging */
 }
 
 #vvv-overlay.pop {
