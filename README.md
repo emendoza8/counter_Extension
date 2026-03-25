@@ -3,11 +3,14 @@
 A simple Chrome extension that displays a floating counter overlay.
 
 ## Features
-- Type `vvv` quickly to increment the counter
+- Type `iii` quickly to increment the counter
+- Type `ddd` quickly to decrement the counter
 - Type `rrr` to reset
-- Works anywhere (including text inputs)
+- Works anywhere except Google-based pages
 - Floating overlay UI
 - Persistent count using localStorage
+- Draggable overlay
+
 
 ## Installation
 
@@ -22,8 +25,6 @@ A simple Chrome extension that displays a floating counter overlay.
 The extension listens for rapid key sequences using timing-based detection and updates a UI overlay injected into the page.
 
 ## Future Improvements
-- Draggable overlay
-- Sound effects
 - Custom key sequences
 - Game-style UI
 
