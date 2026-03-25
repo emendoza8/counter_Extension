@@ -12,31 +12,4 @@
       "run_at": "document_idle"
     }
   ]
-}{{
-  "manifest_version": 3,
-  "name": "VVV Counter Overlay",
-  "version": "1.2",
-  "description": "Type 'vvv' quickly to increment a floating counter",
-  "permissions": ["storage"],
-  "content_scripts": [
-    {
-      "matches": ["<all_urls>"],
-      "js": ["content.js"],
-      "css": ["styles.css"],
-      "run_at": "document_idle"
-    }
-  ]
-}
-  "manifest_version": 3,
-  "name": "VVV Counter Overlay",
-  "version": "1.1",
-  "description": "Type 'vvv' quickly to increment a floating counter",
-  "content_scripts": [
-    {
-      "matches": ["<all_urls>"],
-      "js": ["content.js"],
-      "css": ["styles.css"],
-      "run_at": "document_idle"
-    }
-  ]
 }
